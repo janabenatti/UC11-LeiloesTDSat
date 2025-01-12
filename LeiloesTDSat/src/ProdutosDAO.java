@@ -49,7 +49,7 @@ public class ProdutosDAO {
     }
 
     public ArrayList<ProdutosDTO> listarProdutos() throws SQLException {
-    ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+    ArrayList<ProdutosDTO> listagemVendidos = new ArrayList<>();
     Connection conn = null;
     PreparedStatement preparedStatement = null;
 
@@ -67,7 +67,7 @@ public class ProdutosDAO {
             p.setNome(resposta.getString("nome"));
             p.setValor(resposta.getInt("valor")); 
             p.setStatus(resposta.getString("status"));
-            listagem.add(p);
+            listagemVendidos.add(p); 
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -81,7 +81,8 @@ public class ProdutosDAO {
         }
     }
 
-    return listagem; 
+    return listagemVendidos; 
+    
 }
     
    public void venderProduto(ProdutosDTO produto) throws SQLException {
@@ -123,9 +124,6 @@ public class ProdutosDAO {
             }       
         }
 
-    }  
-
-}      
-
-
+   }
+}
 
