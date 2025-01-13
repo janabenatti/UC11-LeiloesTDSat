@@ -49,7 +49,7 @@ public class ProdutosDAO {
     }
 
     public ArrayList<ProdutosDTO> listarProdutos() throws SQLException {
-    ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+    ArrayList<ProdutosDTO> listagemVendidos = new ArrayList<>();
     Connection conn = null;
     PreparedStatement preparedStatement = null;
 
@@ -67,7 +67,7 @@ public class ProdutosDAO {
             p.setNome(resposta.getString("nome"));
             p.setValor(resposta.getInt("valor")); 
             p.setStatus(resposta.getString("status"));
-            listagem.add(p);
+            listagemVendidos.add(p); 
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -81,6 +81,61 @@ public class ProdutosDAO {
         }
     }
 
-    return listagem; 
+    return listagemVendidos; 
+    
 }
+    
+   public void venderProduto(ProdutosDTO produto) throws SQLException {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            // Estabelecendo a conexão com o banco de dados
+            conectaDAO conexao = new conectaDAO();
+            conn = conexao.connectDB();
+
+            // Comando SQL para atualizar o status do produto
+            String sql = "UPDATE produtos SET status = ? WHERE id = ?";
+            preparedStatement = conn.prepareStatement(sql);
+
+            // Substituindo os placeholders no SQL pelos valores do produto
+            preparedStatement.setString(1, "Vendido");
+            preparedStatement.setInt(2, produto.getId());
+
+            // Executando a atualização
+            int linhasAfetadas = preparedStatement.executeUpdate();
+
+            // Verificando se o produto foi atualizado com sucesso
+            if (linhasAfetadas > 0) {
+                JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Produto não encontrado!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            // Fechando o PreparedStatement e a conexão
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }       
+        }
+
+   }
+
+    ArrayList<ProdutosDTO> listarProdutosVendidos() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void venderProduto(int idProduto) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    boolean produtoExiste(int idProduto) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
+

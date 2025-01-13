@@ -1,12 +1,18 @@
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Adm
@@ -137,19 +143,99 @@ public class listagemVIEW extends javax.swing.JFrame {
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = id_produto_venda.getText();
-        
+
         ProdutosDAO produtosdao = new ProdutosDAO();
-        
+
         //produtosdao.venderProduto(Integer.parseInt(id));
         listarProdutos();
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW(); 
+        btnVender.addActionListener(new ActionListener() {
+            @Override
+
+            public void actionPerformed(ActionEvent e) {
+                abrirTelaVendas();
+            }
+
+            private void abrirTelaVendas() {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
+            private void dispose() {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
+            public class ListagemProdutos extends JFrame {
+
+                private JTable tabelaProdutos;
+                private JTextField txtIDProduto;
+                private JButton btnVender;
+
+                public ListagemProdutos() {
+                    initComponents();
+                    configurarEventos();
+                }
+
+                private void configurarEventos() {
+                    btnVender.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            venderProduto();
+                        }
+                    });
+                }
+
+                private void venderProduto() {
+                    try {
+                        String idProduto = txtIDProduto.getText();
+
+                        if (idProduto.isEmpty()) {
+                            JOptionPane.showMessageDialog(this, "Por favor, insira o ID do produto.");
+                            return;
+                        }
+
+                        int id = Integer.parseInt(idProduto);
+                        boolean produtoEncontrado = false;
+
+                        // Percorre a tabela para verificar e atualizar o status do produto
+                        for (int i = 0; i < tabelaProdutos.getRowCount(); i++) {
+                            if (Integer.parseInt(tabelaProdutos.getValueAt(i, 0).toString()) == id) {
+                                produtoEncontrado = true;
+                                tabelaProdutos.setValueAt("Vendido", i, 3); // Altera o status para "Vendido"
+                                JOptionPane.showMessageDialog(this, "Produto vendido com sucesso!");
+                                break;
+                            }
+                        }
+
+                        if (!produtoEncontrado) {
+                            JOptionPane.showMessageDialog(this, "Produto com ID " + id + " não encontrado.");
+                        }
+
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "O ID deve ser um número.");
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Erro ao vender produto: " + ex.getMessage());
+                    }
+                }
+
+                private void initComponents() {
+                    // Inicialize os componentes da interface, como a tabela, botões, etc.
+                }
+            }
+
+            private void venderProduto() {
+
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+        });
+
+//vendasVIEW vendas = new vendasVIEW(); 
         //vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
@@ -201,16 +287,16 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JTable listaProdutos;
     // End of variables declaration//GEN-END:variables
 
-    private void listarProdutos(){
+    private void listarProdutos() {
         try {
             ProdutosDAO produtosdao = new ProdutosDAO();
-            
+
             DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
             model.setNumRows(0);
-            
+
             ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
-            
-            for(int i = 0; i < listagem.size(); i++){
+
+            for (int i = 0; i < listagem.size(); i++) {
                 model.addRow(new Object[]{
                     listagem.get(i).getId(),
                     listagem.get(i).getNome(),
@@ -220,6 +306,6 @@ public class listagemVIEW extends javax.swing.JFrame {
             }
         } catch (Exception e) {
         }
-    
+
     }
 }
